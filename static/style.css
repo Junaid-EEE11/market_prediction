@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex; /* Enables flexbox */
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    min-height: 100vh; /* Ensures the body takes at least full viewport height */
+    margin: 0; /* Remove default margin */
+    overflow: auto; /* Allow page to scroll if content exceeds the viewport */
+}
+
+.form-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Set a fixed width for the form */
+    box-sizing: border-box; /* Ensures padding doesn't affect the width */
+}
+
+
+
+
+
+h1 {
+    text-align: center;
+}
+
+/* Container to wrap the checkboxes */
+.checkbox-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Adds space between checkboxes */
+}
+
+/* Ensure checkboxes and labels are aligned correctly */
+label {
+  display: inline-flex; /* Use inline-flex for proper inline alignment */
+  align-items: center; /* Aligns checkbox and text vertically */
+  margin-right: 20px; /* Adds space between labels */
+}
+
+/* Adjust vertical alignment of checkboxes */
+input[type="checkbox"] {
+  vertical-align: middle; /* Ensures the checkbox aligns with the text */
+  margin-right: 5px; /* Adds space between checkbox and text */
+  position: relative;
+  top: 5px; /* Adjusts the checkbox position slightly if it's too high */
+}
+
+
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #45a049;
+}
