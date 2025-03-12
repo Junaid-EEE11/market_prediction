@@ -3,7 +3,10 @@ import psycopg2
 from psycopg2 import pool
 from dotenv import load_dotenv
 import os
+import pickle
+import pandas as pd
 
+app = Flask(__name__)
 # Load environment variables
 load_dotenv()
 
@@ -116,6 +119,79 @@ def submit_entry():
         return jsonify({'error': str(e)}), 500
     finally:
         release_db_connection(conn)
+
+
+import joblib
+import os
+
+preprocessor = joblib.load(r'web-project-models/preprocessor.pk1')
+
+@app.route('/predict-price', methods=['POST'])
+def predict_price():
+    try:
+        # Extract input data from request
+        data = request.get_json();
+        required_fields = ['kilometers-run', 'engine-cc', 'manufacture-year', 'registration-year']
+        if not all(data[field] for field in required_fields):
+            return jsonify({'error': 'Missing required fields'}), 400
+        # Create DataFrame from dictionary
+        df_new_data = pd.DataFrame([{
+            "Brand": data["brand"],
+            "Model": data["model"],
+            "Body Type": data["body"],
+            "Condition": data["condition"],
+            "Area_info": data["area"],
+            "Kilometers Run": int(data["kilometers-run"]),
+            "Engine Capacity": int(data["engine-cc"]),
+            "Negotiable or not": data["negotiation"],
+            "Registration age": 2025 - int(data["registration-year"]),
+            "car_age": 2025 - int(data["manufacture-year"]),
+            "Transmission": data["transmission"],
+            "Other fuel type": "1" if "Other" in data["fuel-types"] else "0"
+        }])
+
+        # Add fuel type columns
+        fuel_columns = {'CNG', 'Diesel', 'Electric', 'Hybrid', 'LPG', 'Octane', 'Petrol'}
+        for col in fuel_columns:
+            df_new_data[col] = "1" if col in data["fuel-types"] else "0"
+
+        # Preprocess the input data using the preprocessor (one-hot encoding, scaling)
+        x_trans = preprocessor.transform(df_new_data)
+
+        # If the result is sparse, convert it to dense array
+        x_transformed_dense = x_trans.toarray()
+        # Load all models
+        models = load_models()
+        predictions = {}
+
+        # Make predictions
+        for model_name, model in models.items():
+            try:
+                price = model.predict(x_transformed_dense)[0]
+                predictions[model_name.split(".")[0]] = f"{int(price):,}"  # Format with commas
+            except Exception as e:
+                predictions[model_name] = f"Error: {str(e)}"
+        return jsonify(predictions)
+
+    except Exception as e:
+        # If an error occurs, return an error message
+        return jsonify({'error': str(e)}), 500
+
+def load_models():
+    """Load all model files from the directory except 'preprocessor.pk1'"""
+    model_dir = "web-project-models"
+    model_files = [f for f in os.listdir(model_dir) if f.endswith(".pk1") and f != "preprocessor.pk1"]
+    models = {}
+
+    for model_file in model_files:
+        try:
+            model_path = os.path.join(model_dir, model_file)
+            models[model_file] = joblib.load(model_path)  
+        except Exception as e:
+            print(f"Error loading {model_file}: {e}")
+
+    return models
+
 
 if __name__ == '__main__':
     app.run(debug=True)

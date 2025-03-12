@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         data["fuel-types"] = Array.from(document.querySelectorAll('input[name="fuel-type"]:checked'))
                                  .map(checkbox => checkbox.value);
-console.log(data);
         fetch('/submit-entry', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -80,4 +79,50 @@ function addOption(select, value) {
         option.textContent = value;
         select.appendChild(option);
 };
+
+    const prediction = document.getElementById("predict-btn");
+    prediction.addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const formDatas = new FormData(form);
+    const data = {};
+
+    // Convert FormData to JSON
+    formDatas.forEach((value, key) => {
+        data[key] = value;
+    });
+
+    // Collect fuel types as an array
+    data["fuel-types"] = Array.from(document.querySelectorAll('input[name="fuel-type"]:checked'))
+                               .map(checkbox => checkbox.value);
+
+
+    // Fetch request with correct headers
+    fetch('/predict-price', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json()).catch(error => console.error("Error:", error))
+    .then(response => {
+        const predictSection = document.getElementById("prediction-section");
+        const tableBody = document.getElementById("prediction-table-body");
+
+        // Clear previous results
+        tableBody.innerHTML = "";
+
+        for (let model in response) {
+            let row = `<tr>
+                          <td>${model}</td>
+                          <td>${response[model].toLocaleString()}</td>
+                      </tr>`;
+            tableBody.innerHTML += row;
+        }
+
+        predictSection.style.display = "block"; // Show results
+    })
+    .catch(error => console.error("Error:", error));
+});
 });

@@ -1,54 +1,73 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
-    display: flex; /* Enables flexbox */
-    justify-content: center; /* Centers content horizontally */
-    align-items: center; /* Centers content vertically */
-    min-height: 100vh; /* Ensures the body takes at least full viewport height */
-    margin: 0; /* Remove default margin */
-    overflow: auto; /* Allow page to scroll if content exceeds the viewport */
+    items-align: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: auto;
 }
+.header-car
+{
+    width: 100%;
+    padding: 20px;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+}
+
 
 .form-container {
     background: #fff;
-    padding: 30px;
+    text-align: center;
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px; /* Set a fixed width for the form */
-    box-sizing: border-box; /* Ensures padding doesn't affect the width */
+    box-sizing: border-box;
+    flex: 0 0 70%; /* Takes 70% of the space */
 }
 
-
-
-
-
+.predict-container {
+    background: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    flex: 0 0 30%; /* Takes 30% of the space */
+}
 h1 {
     text-align: center;
 }
 
-/* Container to wrap the checkboxes */
 .checkbox-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* Adds space between checkboxes */
+    gap: 5px;
+    justify-content: space-between;
 }
 
-/* Ensure checkboxes and labels are aligned correctly */
+.checkbox-container label {
+    flex: 1 1 45%;
+}
+
 label {
-  display: inline-flex; /* Use inline-flex for proper inline alignment */
-  align-items: center; /* Aligns checkbox and text vertically */
-  margin-right: 20px; /* Adds space between labels */
+    display: inline-flex;
+    margin-right: 20px;
 }
 
-/* Adjust vertical alignment of checkboxes */
 input[type="checkbox"] {
-  vertical-align: middle; /* Ensures the checkbox aligns with the text */
-  margin-right: 5px; /* Adds space between checkbox and text */
-  position: relative;
-  top: 5px; /* Adjusts the checkbox position slightly if it's too high */
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 5px;
 }
-
-
 
 input, select, textarea {
     width: 100%;
@@ -56,17 +75,41 @@ input, select, textarea {
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
-button {
+button, .btn {
     background-color: #4CAF50;
     color: white;
-    padding: 10px;
     border: none;
     border-radius: 4px;
-    width: 100%;
+    width: 30%;
+    display: block;  /* Make it a block element */
+    margin: 10px auto; /* Center horizontally */
+    cursor: pointer;
+    font-size: 16px;
 }
 
-button:hover {
-    background-color: #45a049;
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
+
+
+
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container, .predict-container {
+        width: 100%;
+    }
+}
+input[type="text"] {
+    display: none;
+}
+

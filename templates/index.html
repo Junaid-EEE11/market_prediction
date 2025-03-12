@@ -7,105 +7,135 @@
     <title>Car Data Entry Form</title>
     <link rel="stylesheet" href="../static/style.css">
     <script src="../static/script.js"></script>
+
 </head>
 
 <body>
-    <div class="form-container">
-        <h1>Car Data Entry Form</h1>
-        <form id="car-data-form">
-    <label for="brand">Brand:</label>
-    <select id="brand" name="brand" data-type="brand" data-index="1" onchange="checkOption(this)" required>
-        <option value="">Select Brand</option>
-        <option value="brand">Other</option>
-    </select>
-    <input type="text" id="otherInput1" name="brand" placeholder="Enter new brand" style="display: none" />
+<div class="header-car">
+    <h1>Car Data Entry Form</h1>
+</div>
+    <div class="main-container">
+        <div class="form-container">
+            <form id="car-data-form">
+                <table>
+                    <tr>
+                        <th><label for="brand">Brand:</label></th>
+                        <td>
+                            <select id="brand" name="brand" data-type="brand" data-index="1" onchange="checkOption(this)" required>
+                                <option value="">Select Brand</option>
+                                <option value="brand">Other</option>
+                            </select>
+                            <input type="text" id="otherInput1" name="brand" placeholder="Enter new brand" display="none" />
+                        </td>
+                        <th><label for="model">Model:</label></th>
+                        <td>
+                            <select id="model" name="model" data-type="model" data-index="2" onchange="checkOption(this)" required>
+                                <option value="">Select Model</option>
+                                <option value="model">Other</option>
+                            </select>
+                            <input type="text" id="otherInput2" name="model" placeholder="Enter new model"  display="none"/>
+                        </td>
 
-    <label for="model">Model:</label>
-    <select id="model" name="model" data-type="model" data-index="2" onchange="checkOption(this)" required>
-        <option value="">Select Model</option>
-        <option value="model">Other</option>
-    </select>
-    <input type="text" id="otherInput2" name="model" placeholder="Enter new model" style="display: none" />
+                        <th><label for="body">Body:</label></th>
+                        <td>
+                            <select id="body" name="body" data-type="body" data-index="3" onchange="checkOption(this)" required>
+                                <option value="">Select Body</option>
+                                <option value="body">Other</option>
+                            </select>
+                            <input type="text" id="otherInput3" name="body" placeholder="Enter new body type" display="none" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="area">Area:</label></th>
 
-    <label for="body">Body:</label>
-    <select id="body" name="body" data-type="body" data-index="3" onchange="checkOption(this)" required>
-        <option value="">Select Body</option>
-        <option value="body">Other</option>
-    </select>
-    <input type="text" id="otherInput3" name="body" placeholder="Enter new body type" style="display: none" />
+                        <td>
+                            <select id="area" name="area" data-type="area" data-index="4" onchange="checkOption(this)" required>
+                                <option value="">Select Area</option>
+                                <option value="area">Other</option>
+                            </select>
+                            <input type="text" id="otherInput4" name="area" placeholder="Enter new area type" display="none" />
+                        </td>
 
-    <label for="area">Area:</label>
-    <select id="area" name="area" data-type="area" data-index="4" onchange="checkOption(this)" required>
-        <option value="">Select Area</option>
-        <option value="area">Other</option>
-    </select>
-    <input type="text" id="otherInput4" name="area" placeholder="Enter new area type" style="display: none" />
+                        <th><label for="condition">Condition:</label></th>
+                        <td>
+                            <select id="condition" name="condition" required>
+                                <option value="New">New</option>
+                                <option value="Used">Used</option>
+                                <option value="Reconditioned">Reconditioned</option>
+                            </select>
+                        </td>
 
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" required />
+                        <th><label for="transmission">Transmission:</label></th>
+                        <td>
+                            <select id="transmission" name="transmission" required>
+                                <option value="Automatic">Automatic</option>
+                                <option value="Manual">Manual</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="negotiation">Negotiable:</label></th>
+                        <td>
+                            <select id="negotiation" name="negotiation">
+                                <option value="Negotiable">Negotiable</option>
+                                <option value="">Not Negotiable</option>
+                            </select>
+                        </td>
+                        <th><label for="kilometers-run">Kilometers Run:</label></th>
+                        <td><input type="number" id="kilometers-run" name="kilometers-run" required /></td>
 
-            <label>Fuel Type:</label>
-            <div class="checkbox-container">
-                <label>
-                    <input type="checkbox" id="petrol" name="fuel-type" value="Petrol" /> Petrol
-                </label>
-                <label>
-                    <input type="checkbox" id="diesel" name="fuel-type" value="Diesel" /> Diesel
-                </label>
-                <label>
-                    <input type="checkbox" id="electric" name="fuel-type" value="Electric" /> Electric
-                </label>
-                <label>
-                    <input type="checkbox" id="hybrid" name="fuel-type" value="Hybrid" /> Hybrid
-                </label>
-                <label>
-                    <input type="checkbox" id="cng" name="fuel-type" value="CNG" /> CNG
-                </label>
-                <label>
-                    <input type="checkbox" id="lpg" name="fuel-type" value="LPG" /> LPG
-                </label>
-                <label>
-                    <input type="checkbox" id="octane" name="fuel-type" value="Octane" /> Octane
-                </label>
-                <label>
-                    <input type="checkbox" id="other-fuel-type" name="fuel-type" value="Other" /> Other fuel type
-                </label>
+                        <th><label for="manufacture-year">Manufacture Year:</label></th>
+                        <td><input type="number" id="manufacture-year" name="manufacture-year" required /></td>
+                    </tr>
+                    <tr>
+                        <th><label for="registration-year">Registration Year:</label></th>
+                        <td><input type="number" id="registration-year" name="registration-year" required /></td>
+
+                        <th><label for="engine-cc">Engine CC:</label></th>
+                        <td><input type="number" id="engine-cc" name="engine-cc" required /></td>
+
+                        <th><label for="price">Price:</label></th>
+                        <td><input type="number" id="price" name="price" required /></td>
+                    </tr>
+                    <tr>
+                        <th><label>Fuel Type:</label></th>
+                        <td colspan="5">
+                            <div class="checkbox-container">
+                                <label><input type="checkbox" id="petrol" name="fuel-type" value="Petrol" /> Petrol</label>
+                                <label><input type="checkbox" id="diesel" name="fuel-type" value="Diesel" /> Diesel</label>
+                                <label><input type="checkbox" id="electric" name="fuel-type" value="Electric" /> Electric</label>
+                                <label><input type="checkbox" id="hybrid" name="fuel-type" value="Hybrid" /> Hybrid</label>
+                                <label><input type="checkbox" id="cng" name="fuel-type" value="CNG" /> CNG</label>
+                                <label><input type="checkbox" id="lpg" name="fuel-type" value="LPG" /> LPG</label>
+                                <label><input type="checkbox" id="octane" name="fuel-type" value="Octane" /> Octane</label>
+                                <label><input type="checkbox" id="other-fuel-type" name="fuel-type" value="Other" /> Other fuel type</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="predict-container">
+            <h1>Want Car Price Prediction? FIll up form and hit</h1>
+            <button id="predict-btn" class="btn">Predict</button>
+
+            <div id="prediction-section" style="display: none;">
+                <h2>Your Predictions:</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Predicted Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prediction-table-body"></tbody>
+                </table>
             </div>
-
-            <label for="condition">Condition:</label>
-            <select id="condition" name="condition" required>
-                <option value="New">New</option>
-                <option value="Used">Used</option>
-                <option value="Reconditioned">Reconditioned</option>
-            </select>
-
-            <label for="transmission">Transmission:</label>
-            <select id="transmission" name="transmission" required>
-                <option value="Automatic">Automatic</option>
-                <option value="Manual">Manual</option>
-                <option value="Other">Other</option>
-            </select>
-
-            <label for="negotiation">Negotiable:</label>
-            <select id="negotiation" name="negotiation">
-                <option value="Negotiable">Negotiable</option>
-                <option value="">Not Negotiable</option>
-            </select>
-
-            <label for="kilometers-run">Kilometers Run:</label>
-            <input type="number" id="kilometers-run" name="kilometers-run" required />
-
-            <label for="manufacture-year">Manufacture Year:</label>
-            <input type="number" id="manufacture-year" name="manufacture-year" required />
-
-            <label for="registration-year">Registration Year:</label>
-            <input type="number" id="registration-year" name="registration-year" required />
-
-            <label for="engine-cc">Engine CC:</label>
-            <input type="number" id="engine-cc" name="engine-cc" required />
-
-            <button type="submit">Submit</button>
-        </form>
+        </div>
     </div>
 </body>
 
