@@ -1,16 +1,16 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 import psycopg2
 from psycopg2 import pool
 from dotenv import load_dotenv
 import os
-import pickle
+import joblib
 import pandas as pd
 
 app = Flask(__name__)
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')  # Make sure to use a secure secret key
 
 # Database Connection Pooling
 try:
@@ -35,13 +35,12 @@ def release_db_connection(conn):
     if conn:
         db_pool.putconn(conn)
 
-@app.route('/')
-def index():
-    return render_template('index.html')  # Load main HTML form
-
 @app.route('/get-brands', methods=['GET'])
 def get_brands():
     """Fetch unique car brands."""
+    if 'user' not in session:
+        flash("You need to log in first!", "warning")
+        return render_templete("landing_page.html")
     conn = get_db_connection()
     try:
         with conn.cursor() as cursor:
@@ -56,6 +55,9 @@ def get_brands():
 @app.route('/get-models-body', methods=['GET'])
 def get_models_and_body():
     """Fetch car models and body types based on selected brand."""
+    if 'user' not in session:
+        flash("You need to log in first!", "warning")
+        return render_templete("landing_page.html")
     brand = request.args.get('brand')
     if not brand:
         return jsonify({'error': 'Brand parameter is required'}), 400
@@ -78,6 +80,9 @@ def get_models_and_body():
 @app.route('/get-area', methods=['GET'])
 def get_area():
     """Fetch unique area information."""
+    if 'user' not in session:
+        flash("You need to log in first!", "warning")
+        return render_templete("landing_page.html")
     conn = get_db_connection()
     try:
         with conn.cursor() as cursor:
@@ -93,6 +98,9 @@ def get_area():
 def submit_entry():
     """Insert a new car entry into the database."""
     data = request.get_json()
+    if 'user' not in session:
+        flash("You need to log in first!", "warning")
+        return render_templete("landing_page.html")
     petrol = "Petrol" in data["fuel-types"] # data['fuel-types'].get('petrol', False)  # Default to False if not provided
     diesel = "Diesel" in data["fuel-types"] # data['fuel-types'].get('diesel', False)
     electric = "Electric" in data["fuel-types"] #  data['fuel-types'].get('electric', False)
@@ -120,14 +128,13 @@ def submit_entry():
     finally:
         release_db_connection(conn)
 
-
-import joblib
-import os
-
 preprocessor = joblib.load(r'web-project-models/preprocessor.pk1')
 
 @app.route('/predict-price', methods=['POST'])
 def predict_price():
+    if 'user' not in session:
+        flash("You need to log in first!", "warning")
+        return render_templete("landing_page.html")
     try:
         # Extract input data from request
         data = request.get_json();
@@ -191,6 +198,76 @@ def load_models():
             print(f"Error loading {model_file}: {e}")
 
     return models
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if request.method == 'POST':
+        data = request.get_json(); 
+        email = data.get('email'); 
+        password = data.get('password');
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute('''SELECT name FROM "users" WHERE "email" = %s AND "password" = %s''', (email, password))
+            names = [row[0] for row in cursor.fetchall()]
+            if len(names)>0:
+                session['user'] = names[0]  # Store user in session
+                release_db_connection(conn)
+                return jsonify({'success':True,'msg':'sign in successful'})  # Redirect to index after successful login
+            else:
+                release_db_connection(conn)
+                return jsonify({'success': False,'msg':'Wrong email password'})
+ 
+    except Exception as e:
+        release_db_connection(conn)
+        return jsonify({'success': False, 'msg': "Some during fetching from database, Error"})
+
+# Logout Route
+@app.route('/signout')
+def signout():
+    session.pop('user', None)  # Remove user from session
+    flash("You have been logged out.", "info")
+    return jsonify({'success':True,'msg':'successful'})
+
+@app.route('/customer-register', methods=['GET', 'POST'])
+def customer_register():
+    if request.method == 'POST':
+        username = request.get_json()['username']
+        password = request.get_json()['password']
+        email = request.get_json()['email']
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            print(1)
+            cursor.execute('''SELECT name FROM users WHERE email = %s''', (email,))
+            print(2)
+            names = [row[0] for row in cursor.fetchall()]
+            print(names)
+
+            if len(names)>0:
+                print(3)
+ 
+                release_db_connection(conn); 
+                return jsonify({'success': False,'msg': 'enter new email'})
+            else:
+                cursor.execute('''INSERT INTO "users" ("name", "password", "email") VALUES (%s, %s, %s)''', ( username, password, email))
+                conn.commit()
+                session['user'] = username  # Store user in session
+                return jsonify({'success':True,'msg':'registration successful'})
+    except Exception as e:
+        print(username)
+        release_db_connection(conn)
+        return jsonify({'success': False,'msg': str(e)})
+
+# Protect Routes - Example of protecting a route that requires login
+@app.route('/')
+def index():
+    if 'user' not in session:
+        flash("You need to log in first!", "warning")
+        return render_template("landing_page.html")
+    else:
+        return render_template('index.html', user=session['user'])  # Load main HTML form
+
 
 
 if __name__ == '__main__':

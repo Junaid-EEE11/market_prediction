@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price</title>
+    <link rel="stylesheet" href="../static/landstyle.css">
+
+</head>
+
+<body>
+{{msg}}
+<div id="content">
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#">Home</a>
+
+        <a href="#">News</a>
+        <a href="#">Downloads</a>
+        <a href="#">Car Data</a>
+        <a href="#">Models</a>
+        <a href="#">Predictions</a>
+        <a href="#">Brands</a>
+        <a href="#" onclick="openModal('signInModal')">Sign In</a>
+    </nav>
+
+    <!-- Landing Section -->
+    <section class="landing-section">
+        <div class="landing-content">
+            <h1>Welcome to Our Platform</h1>
+            <p>Your one-stop solution for managing all your needs. Join us today!</p>
+            <a href="#" class="btn-primary" onclick="openModal('signUpModal')">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Modal for Sign Up -->
+    <div id="signUpModal" class="modal">
+        <div class="modal-content">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <input type="text" name="username" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="submit" value="Sign Up">
+            </form>
+
+<br>
+<br>            <button onclick="closeModal('signUpModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Modal for Sign In -->
+    <div id="signInModal" class="modal">
+        <div class="modal-content">
+            <h2>Sign In</h2>
+            <form id="signin-form">
+                <input type="email" name="email" placeholder="Email Address" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="submit" value="Sign In">
+            </form>
+            <h4>Donot have account? Sign Up</h4>
+        	<a href="#" onclick="closeModal('signInModal'); openModal('signUpModal')">Sign Up</a>
+<br>
+<br>
+		<button onclick="closeModal('signInModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Optional Tabs Section -->
+    <div class="tabs">
+        <a href="#">About Us</a>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+    </div>
+</div>
+
+</body>
+    <script src="../static/landscript.js"></script>
+
+</html>

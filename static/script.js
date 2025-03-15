@@ -125,4 +125,16 @@ function addOption(select, value) {
     })
     .catch(error => console.error("Error:", error));
 });
+
+    const logout = document.getElementById("logout-car");
+    logout.addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent default form submission
+    fetch('/signout')
+.then(response=>response.json())
+.then(data => {
+      if (data.success) {window.location.href='/';}
+    else {alert(data.msg)};
+});
+});
+
 });
