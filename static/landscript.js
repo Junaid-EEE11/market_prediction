@@ -1,3 +1,12 @@
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+const csrfToken = getCookie('csrf_access_token');
+
+
+
 function openModal(modalId) {
   document.getElementById(modalId).style.display = "flex";
 }
@@ -14,7 +23,10 @@ signupform.addEventListener("submit", function (event) {
   });
   fetch("/customer-register", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+credentials: 'include',
+    headers: { "Content-Type": "application/json" ,  
+'X-CSRF-TOKEN': csrfToken
+},
     body: JSON.stringify(data),
   })
     .then(response=>response.json())
@@ -33,7 +45,10 @@ signinform.addEventListener("submit", function (event) {
   });
   fetch("/signin", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+credentials: 'include',
+    headers: { "Content-Type": "application/json", 
+'X-CSRF-TOKEN': csrfToken,
+ },
     body: JSON.stringify(data),
   })
 .then(response=>response.json())

@@ -1,3 +1,11 @@
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+const csrfToken = getCookie('csrf_access_token');
+
+
 function checkOption(selectElement) {
   const otherInput = document.getElementById(
     `otherInput${selectElement.dataset.index}`
@@ -66,7 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                  .map(checkbox => checkbox.value);
         fetch('/submit-entry', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            headers: {'Content-Type': 'application/json',     "X-CSRF-Token": csrfToken},
             body: JSON.stringify(data)
         })
         .then(res => res.json())
@@ -100,17 +109,18 @@ function addOption(select, value) {
     // Fetch request with correct headers
     fetch('/predict-price', {
         method: "POST",
+        credentials: 'include',
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",  'X-CSRF-TOKEN': csrfToken
         },
         body: JSON.stringify(data)
     })
-    .then(res => res.json()).catch(error => console.error("Error:", error))
+    .then(response => response.json())
+
     .then(response => {
         const predictSection = document.getElementById("prediction-section");
         const tableBody = document.getElementById("prediction-table-body");
 
-        // Clear previous results
         tableBody.innerHTML = "";
 
         for (let model in response) {
